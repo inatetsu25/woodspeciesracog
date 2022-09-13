@@ -1,5 +1,6 @@
 # 参考リンク
 # メイン https://qiita.com/okateru/items/6f9daf1094ef8c2d6d68
+# メイン https://streamlit.io/
 # PIL→opencv変換 https://qiita.com/derodero24/items/f22c22b22451609908ee
 # 仮想環境 https://qiita.com/fiftystorm36/items/b2fd47cf32c7694adc2e
 # モジュールのインストール https://note.nkmk.me/python-pip-install-requirements/
@@ -12,9 +13,10 @@ import os
 
 from backend import predict, preprocess
 
+favicon = Image.open("名大.png")
 st.set_page_config(
      page_title="木検索アプリ",
-     page_icon="🦈",
+     page_icon=favicon,
  )
 
 # タイトル
