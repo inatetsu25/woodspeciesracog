@@ -24,7 +24,7 @@ st.title('木検索アプリ')
 
 # サイドバー
 st.sidebar.title('さっそく検索する')
-species_name=st.sidebar.text_input('①種名を入力', value="?", help="例 スギ")
+species_name=st.sidebar.text_input('①種名を入力', value="nodata", help="例 スギ")
 st.sidebar.write('②画像をアップロード')
 st.sidebar.write('③識別結果が右に表示されます。')
 st.sidebar.write('--------------')
