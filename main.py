@@ -10,7 +10,6 @@
 import streamlit as st
 from PIL import Image
 import os
-
 from backend import predict, preprocess
 
 favicon = Image.open("名大.png")
