@@ -36,6 +36,9 @@ if uploaded_file is not None:
     progress_message.write('識別中です。お待ちください。')
     bar = st.progress(0)
 
+    if not os.path.exists('imgs'):
+        os.mkdir('imgs')
+
     IMG_PATH = os.path.join('imgs/', species_name)
     if not os.path.exists(IMG_PATH):
         os.mkdir(IMG_PATH)
