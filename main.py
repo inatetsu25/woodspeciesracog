@@ -15,6 +15,7 @@ from backend import predict, preprocess
 favicon = Image.open("名大.png")
 st.set_page_config(
      page_title="日本産広葉樹判別アプリ",
+     page_title="木検索アプリ",
      page_icon=favicon,
  )
 
