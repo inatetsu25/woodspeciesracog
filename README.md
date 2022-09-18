@@ -5,3 +5,4 @@
 [仮想環境](https://qiita.com/fiftystorm36/items/b2fd47cf32c7694adc2e)  
 [モジュールのインストール](https://note.nkmk.me/python-pip-install-requirements/)  
 [画像の保存](https://zenn.dev/ohtaman/articles/streamlit_tips)
+[pythonとdropbox接続方法](https://zerofromlight.com/blogs/detail/122/)
