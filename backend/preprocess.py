@@ -26,6 +26,5 @@ def preprocess(img):
     for patch in np.array_split(row_img, cols, axis=1):
       patches.append(patch)
   patches= np.array(patches)
-  print(np.shape(patches))
   patches = patches.reshape(100, 64, 64, 1)
   return patches
