@@ -10,6 +10,7 @@
 import streamlit as st
 from PIL import Image
 import os
+import dropbox
 
 from backend import predict, preprocess
 
@@ -29,24 +30,18 @@ st.sidebar.write('②画像をアップロード')
 st.sidebar.write('③識別結果が右に表示されます。')
 st.sidebar.write('--------------')
 uploaded_file = st.sidebar.file_uploader("画像をアップロードしてください。", type=['jpg','jpeg', 'png'])
-
+dbx = dropbox.Dropbox('sl.BPgExr8s4UyOHzyMl5zOoPEHBbcilLQ18k1-FcWsaAhXFyfFuBSdhWbOk-e-jcwazQAHvsQu_EA4S6buTn1NOWensX9WJeSYdm456MG_SAUF9u7TRIUONSebvDLeFjuhU33ylz9o')
 # 以下ファイルがアップロードされた時の処理
 if uploaded_file is not None:
     progress_message = st.empty()
     progress_message.write('識別中です。お待ちください。')
     bar = st.progress(0)
 
-    if not os.path.exists('imgs'):
-        os.mkdir('imgs')
-
-    IMG_PATH = os.path.join('imgs/', species_name)
-    if not os.path.exists(IMG_PATH):
-        os.mkdir(IMG_PATH)
-
-    img_path = os.path.join(IMG_PATH, uploaded_file.name)
     # 画像を保存する
-    with open(img_path, 'wb') as f:
+    with open(uploaded_file.name, 'wb') as f:
         f.write(uploaded_file.read())
+    dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+species_name+uploaded_file.name)
+    os.remove(uploaded_file.name)
         
 
     img = Image.open(uploaded_file)
