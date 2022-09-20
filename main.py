@@ -5,6 +5,8 @@
 # 仮想環境 https://qiita.com/fiftystorm36/items/b2fd47cf32c7694adc2e
 # モジュールのインストール https://note.nkmk.me/python-pip-install-requirements/
 # 画像の保存 https://zenn.dev/ohtaman/articles/streamlit_tips
+# pythonとdropboxの接続 https://zerofromlight.com/blogs/detail/122/
+# dropboxのアクセストークン取得方法 https://zerofromlight.com/blogs/detail/121/
 
 # ライブラリのインポート
 import streamlit as st
@@ -30,7 +32,7 @@ st.sidebar.write('②画像をアップロード')
 st.sidebar.write('③識別結果が右に表示されます。')
 st.sidebar.write('--------------')
 uploaded_file = st.sidebar.file_uploader("画像をアップロードしてください。", type=['jpg','jpeg', 'png'])
-dbx = dropbox.Dropbox('sl.BPgExr8s4UyOHzyMl5zOoPEHBbcilLQ18k1-FcWsaAhXFyfFuBSdhWbOk-e-jcwazQAHvsQu_EA4S6buTn1NOWensX9WJeSYdm456MG_SAUF9u7TRIUONSebvDLeFjuhU33ylz9o')
+dbx = dropbox.Dropbox('ここにアクセストークンを入れる')
 # 以下ファイルがアップロードされた時の処理
 if uploaded_file is not None:
     progress_message = st.empty()
