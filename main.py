@@ -16,6 +16,19 @@ import dropbox
 
 from backend import predict, preprocess
 
+import pandas as pd
+
+DATA_URL = ('Book1.csv')
+DATE_COLUMN = '樹種'
+
+
+def load_data(nrows):
+    data = pd.read_csv(DATA_URL, nrows=nrows)
+    lowercase = lambda x: str(x).lower()
+    data.rename(lowercase, axis='columns', inplace=True)
+    return data
+
+
 favicon = Image.open("名大.png")
 st.set_page_config(
      page_title="日本産広葉樹判別アプリ",
@@ -24,7 +37,8 @@ st.set_page_config(
 
 # タイトル
 st.title('木検索アプリ')
-
+data = load_data(10000)
+st.write(data)
 # サイドバー
 st.sidebar.title('さっそく検索する')
 species_name=st.sidebar.text_input('①種名を入力', value="nodata", help="例 スギ")
