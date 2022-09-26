@@ -18,7 +18,7 @@ from backend import predict, preprocess
 
 import pandas as pd
 
-DATA_URL = ('Book1.csv')
+DATA_URL = ('test.csv')
 DATE_COLUMN = '樹種'
 
 
