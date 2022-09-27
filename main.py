@@ -58,10 +58,16 @@ if uploaded_file is not None:
 
     patches = preprocess.preprocess(img)
     # 各画像や、ラベル、確率を格納する空のリストを定義しておく
-    results = predict.predict_name(patches)
+    results10,results50 = predict.predict_name(patches)
     
     st.subheader('分析結果詳細')
-    for i,result in enumerate(results):
+    for i,result in enumerate(results10):
+        bar.progress(i/2)
+        if result[1] > 0:
+            st.write(result[0], 'の可能性:' , round(result[1],2), '%')
+        else:
+            pass
+    for i,result in enumerate(results50):
         bar.progress(i/2)
         if result[1] > 0:
             st.write(result[0], 'の可能性:' , round(result[1],2), '%')
@@ -71,4 +77,4 @@ if uploaded_file is not None:
     bar.empty()
 
     # ここまで処理が終わったら分析が終わったことを示すメッセージを表示
-    progress_message.write(f'{results[0][0]}です!')
+    progress_message.write(f'{results50[0][0]}です!')

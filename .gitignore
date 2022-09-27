@@ -1,3 +1,6 @@
 venv/
 .DS_Store
 __pycache__/
+my_model.h5
+10_fine.h5
+50_fine.h5
