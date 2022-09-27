@@ -14,20 +14,9 @@ from PIL import Image
 import os
 import dropbox
 
-from backend import predict, preprocess
+from backend import predict, preprocess, member
 
 import pandas as pd
-
-DATA_URL = ('test.csv')
-DATE_COLUMN = '樹種'
-
-
-def load_data(nrows):
-    data = pd.read_csv(DATA_URL, nrows=nrows)
-    lowercase = lambda x: str(x).lower()
-    data.rename(lowercase, axis='columns', inplace=True)
-    return data
-
 
 favicon = Image.open("名大.png")
 st.set_page_config(
@@ -37,8 +26,13 @@ st.set_page_config(
 
 # タイトル
 st.title('木検索アプリ')
-data = load_data(10000)
-st.write(data)
+
+member10 = member.member10(0,10)
+member50 = member.member(0,50)
+df_member10 = pd.DataFrame(member10,columns=['樹種'])
+df_member50 = pd.DataFrame(member50,columns=['樹種'])
+st.write(df_member10)
+st.write(df_member50)
 # サイドバー
 st.sidebar.title('さっそく検索する')
 species_name=st.sidebar.text_input('①種名を入力', value="nodata", help="例 スギ")
@@ -46,7 +40,7 @@ st.sidebar.write('②画像をアップロード')
 st.sidebar.write('③識別結果が右に表示されます。')
 st.sidebar.write('--------------')
 uploaded_file = st.sidebar.file_uploader("画像をアップロードしてください。", type=['jpg','jpeg', 'png'])
-dbx = dropbox.Dropbox('ここにアクセストークンを入れる')
+# dbx = dropbox.Dropbox('ここにアクセストークンを入れる')
 # 以下ファイルがアップロードされた時の処理
 if uploaded_file is not None:
     progress_message = st.empty()
@@ -54,10 +48,10 @@ if uploaded_file is not None:
     bar = st.progress(0)
 
     # 画像を保存する
-    with open(uploaded_file.name, 'wb') as f:
-        f.write(uploaded_file.read())
-    dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+species_name+uploaded_file.name)
-    os.remove(uploaded_file.name)
+    # with open(uploaded_file.name, 'wb') as f:
+    #     f.write(uploaded_file.read())
+    # dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+species_name+uploaded_file.name)
+    # os.remove(uploaded_file.name)
         
 
     img = Image.open(uploaded_file)
