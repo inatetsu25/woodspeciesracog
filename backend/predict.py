@@ -24,5 +24,5 @@ def predict_name(image):
     top = 3
     max_index = sum_pred_value.argsort()[::-1][:top]
     for i in range(top):
-        result.append([member.member(max_index[i]),round(sum_pred_value[max_index[i]],1)])
+        result.append([member.member(max_index[i],max_index[i]+1)[0],round(sum_pred_value[max_index[i]],1)])
     return result
