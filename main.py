@@ -31,8 +31,17 @@ member10 = member.member10(0,10)
 member50 = member.member(0,50)
 df_member10 = pd.DataFrame(member10,columns=['樹種'])
 df_member50 = pd.DataFrame(member50,columns=['樹種'])
-st.write(df_member10)
-st.write(df_member50)
+
+col1, col2 = st.columns(2)
+
+with col1:
+   st.header("10種一覧")
+   st.write(df_member10)
+
+with col2:
+   st.header("50種一覧")
+   st.write(df_member50)
+
 # サイドバー
 st.sidebar.title('さっそく検索する')
 species_name=st.sidebar.text_input('①種名を入力', value="nodata", help="例 スギ")
