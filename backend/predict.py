@@ -6,23 +6,32 @@ from backend import member
 # @st.casheで再読み込みにかかる時間を減らす。
 @st.cache(allow_output_mutation=True)
 def model_load():
-    model = tf.keras.models.load_model('./my_model.h5')
-    return model
+    with tf.keras.utils.CustomObjectScope({'GlorotUniform':tf.keras.initializers.glorot_uniform()}):
+        model50 = tf.keras.models.load_model('./50_fine.h5')
+        model10 = tf.keras.models.load_model('./10_fine.h5')
+    return model10,model50
 
 # 顔画像が誰なのか予測値を上位3人まで返す関数
 def predict_name(image):
 
     # モデルを読み込んで予測値を出す(予測値はラベルでなく確率で出力される）
-    model = model_load()
-    pred_value = model.predict(image)
+    model10,model50 = model_load()
+    pred_value10 = model10.predict(image)
+    pred_value50 = model50.predict(image)
 
-    sum_pred_value = 0
+    sum_pred_value10 = 0
+    sum_pred_value50 = 0
     for index in range(100):
-        sum_pred_value += pred_value[index][:]
+        sum_pred_value10 += pred_value10[index][:]
+        sum_pred_value50 += pred_value50[index][:]
 
-    result = []
+
+    result10 = []
+    result50 = []
     top = 3
-    max_index = sum_pred_value.argsort()[::-1][:top]
+    max_index10 = sum_pred_value10.argsort()[::-1][:top]
+    max_index50 = sum_pred_value50.argsort()[::-1][:top]
     for i in range(top):
-        result.append([member.member(max_index[i],max_index[i]+1)[0],round(sum_pred_value[max_index[i]],1)])
-    return result
+        result10.append([member.member(max_index10[i],max_index10[i]+1)[0],round(sum_pred_value10[max_index10[i]],1)])
+        result50.append([member.member(max_index50[i],max_index50[i]+1)[0],round(sum_pred_value50[max_index50[i]],1)])
+    return result10,result50

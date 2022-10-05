@@ -10,21 +10,18 @@ def pil2cv(pil_image):
             cv_image = cv2.cvtColor(cv_image, cv2.COLOR_RGB2BGR)
         elif cv_image.shape[2] == 4:  # 透過
             cv_image = cv2.cvtColor(cv_image, cv2.COLOR_RGBA2BGRA)
-        return cv_image
+        return cv_image/255
 
 def preprocess(img):
   cv_img = pil2cv(img)
-  gray_img=0.299*cv_img[:,:,2]+0.587*cv_img[:,:,1]+0.114*cv_img[:,:,0]
-  gray_img=np.expand_dims(gray_img,axis=2)
-  gray_img=gray_img[:,:]
-  resized_gray_img = cv2.resize(gray_img, (640, 640))
+  gray_img=cv_img[:,:,[2,1,0]]
+  resized_img = cv2.resize(gray_img, (640, 640))
   rows = int(10)  # 行数
   cols = int(10)  # 列数
 
   patches = []
-  for row_img in np.array_split(resized_gray_img, rows, axis=0):
-    for patch in np.array_split(row_img, cols, axis=1):
-      patches.append(patch)
+  for i in range(10):
+    for j in range(10):
+        patches.append(resized_img[64*i:64*(i+1), 64*j:64*(j+1)])
   patches= np.array(patches)
-  patches = patches.reshape(100, 64, 64, 1)
   return patches
