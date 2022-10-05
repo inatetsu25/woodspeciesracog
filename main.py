@@ -69,14 +69,16 @@ if uploaded_file is not None:
     # 各画像や、ラベル、確率を格納する空のリストを定義しておく
     results10,results50 = predict.predict_name(patches)
     
-    st.subheader('分析結果詳細')
-    for i,result in enumerate(results10):
+    st.header('分析結果詳細')
+    st.subheader('50種モデルの結果')
+    for i,result in enumerate(results50):
         bar.progress(i/2)
         if result[1] > 0:
             st.write(result[0], 'の可能性:' , round(result[1],2), '%')
         else:
             pass
-    for i,result in enumerate(results50):
+    st.subheader('10種モデルの結果')
+    for i,result in enumerate(results10):
         bar.progress(i/2)
         if result[1] > 0:
             st.write(result[0], 'の可能性:' , round(result[1],2), '%')
