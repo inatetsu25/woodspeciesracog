@@ -23,7 +23,7 @@ import pandas as pd
 def select_data():
     con = sqlite3.connect('./sample.db')
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS TEST(time text,name text)")
+    cur.execute("CREATE TABLE IF NOT EXISTS TEST(time datetime,name text)")
     cur.execute("SELECT * FROM TEST")
     for row in cur:
         print(str(row[0]) + "," + str(row[1]))
@@ -34,7 +34,7 @@ def insert_data(time,name):
     con = sqlite3.connect('./sample.db')
     cur = con.cursor()
     sql = 'INSERT INTO TEST (time, name) values (?,?)'
-    data = [str(time), name]
+    data = [time, name]
     cur.execute(sql, data)
     con.commit()
     con.close()
@@ -90,19 +90,12 @@ if uploaded_file is not None:
 
     img = Image.open(uploaded_file)
 
-    print("INSERT前")
-    select_data()
-
-    # INSERT 処理
-    name='yamabousi'
-    insert_data(time,name)
-
-    print("INSERT後")
-    select_data()
-
     # patches = preprocess.preprocess(img)
     # # 各画像や、ラベル、確率を格納する空のリストを定義しておく
     # results10,results50 = predict.predict_name(patches)
+    # insert_data(dt,'pred'+result50)
+    # select_data()
+
     
     st.header('分析結果詳細')
     st.subheader('50種モデルの結果')
