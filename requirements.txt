@@ -1,5 +1,7 @@
-streamlit
-opencv-contrib-python-headless
-tensorflow
-dropbox
-pandas
+DateTime==4.7
+dropbox==11.34.0
+opencv-contrib-python-headless==3.4.9.31
+pandas==1.4.4
+pysqlite3==0.4.7
+streamlit==1.12.2
+tensorflow==2.10.0
