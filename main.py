@@ -14,30 +14,11 @@ from PIL import Image
 import os
 import dropbox
 import datetime
-import sqlite3
 
-from backend import predict, preprocess, member
+from backend import predict, preprocess, member, db
 
 import pandas as pd
 
-def select_data():
-    con = sqlite3.connect('./sample.db')
-    cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS TEST(time datetime,name text)")
-    cur.execute("SELECT * FROM TEST")
-    for row in cur:
-        print(str(row[0]) + "," + str(row[1]))
-    con.close()
-
-
-def insert_data(time,name):
-    con = sqlite3.connect('./sample.db')
-    cur = con.cursor()
-    sql = 'INSERT INTO TEST (time, name) values (?,?)'
-    data = [time, name]
-    cur.execute(sql, data)
-    con.commit()
-    con.close()
 
 favicon = Image.open("名大.png")
 st.set_page_config(
@@ -70,7 +51,7 @@ st.sidebar.write('②画像をアップロード')
 st.sidebar.write('③識別結果が右に表示されます。')
 st.sidebar.write('--------------')
 uploaded_file = st.sidebar.file_uploader("画像をアップロードしてください。", type=['jpg','jpeg', 'png'])
-# dbx = dropbox.Dropbox('sl.BSx6TXgsl_JhP4aMDT6BhtzcXerYwry__r2GCNqPzPB4zEpziL4TBRrXzlFS9Cf-cK1nRf7vyggHxhz0Ap05FZyeeCjWy6AxWejb2sRaoAvrsNQCgDIt6v1S_RE6BX-y7kvrkkg')
+dbx = dropbox.Dropbox('sl.BSx6TXgsl_JhP4aMDT6BhtzcXerYwry__r2GCNqPzPB4zEpziL4TBRrXzlFS9Cf-cK1nRf7vyggHxhz0Ap05FZyeeCjWy6AxWejb2sRaoAvrsNQCgDIt6v1S_RE6BX-y7kvrkkg')
 # 以下ファイルがアップロードされた時の処理
 if uploaded_file is not None:
     progress_message = st.empty()
@@ -82,19 +63,19 @@ if uploaded_file is not None:
     format = uploaded_file.type.split('/', 1)[-1]
 
     # 画像を保存する
-    # with open(uploaded_file.name, 'wb') as f:
-    #     f.write(uploaded_file.read())
-    # dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+"img_"+str(date)+'_'+str(time)+'_'+species_name+'.'+format)
-    # os.remove(uploaded_file.name)
+    with open(uploaded_file.name, 'wb') as f:
+        f.write(uploaded_file.read())
+    dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+"img_"+str(date)+'_'+str(time)+'_'+species_name+'.'+format)
+    os.remove(uploaded_file.name)
         
 
     img = Image.open(uploaded_file)
 
-    # patches = preprocess.preprocess(img)
-    # # 各画像や、ラベル、確率を格納する空のリストを定義しておく
-    # results10,results50 = predict.predict_name(patches)
-    # insert_data(dt,'pred'+result50)
-    # select_data()
+    patches = preprocess.preprocess(img)
+    # 各画像や、ラベル、確率を格納する空のリストを定義しておく
+    results10,results50 = predict.predict_name(patches)
+    db.insert_data(dt,'pred'+results50)
+    db.select_data()
 
     
     st.header('分析結果詳細')

@@ -14,10 +14,15 @@ def pil2cv(pil_image):
 
 def preprocess(img):
   cv_img = pil2cv(img)
-  gray_img=cv_img[:,:,[2,1,0]]
-  resized_img = cv2.resize(gray_img, (640, 640))
-  rows = int(10)  # 行数
-  cols = int(10)  # 列数
+  h, w, _ = cv_img.shape
+  if h<=w:
+    cv_img = cv_img[:, 0: h]
+  else:
+    cv_img = cv_img[0 : w, :]
+
+  color_img=cv_img[:,:,[2,1,0]]
+
+  resized_img = cv2.resize(color_img, (640, 640))
 
   patches = []
   for i in range(10):
