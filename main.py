@@ -7,6 +7,9 @@
 # 画像の保存 https://zenn.dev/ohtaman/articles/streamlit_tips
 # pythonとdropboxの接続 https://zerofromlight.com/blogs/detail/122/
 # dropboxのアクセストークン取得方法 https://zerofromlight.com/blogs/detail/121/
+# dropboxのアクセストークン自動更新 https://zerofromlight.com/blogs/detail/124/
+# App key:  pr67lhblobb9rro
+# App secret: rmlzptwlgp29c2c
 
 # ライブラリのインポート
 import streamlit as st
@@ -51,7 +54,12 @@ st.sidebar.write('②画像をアップロード')
 st.sidebar.write('③識別結果が右に表示されます。')
 st.sidebar.write('--------------')
 uploaded_file = st.sidebar.file_uploader("画像をアップロードしてください。", type=['jpg','jpeg', 'png'])
-dbx = dropbox.Dropbox('sl.BSx6TXgsl_JhP4aMDT6BhtzcXerYwry__r2GCNqPzPB4zEpziL4TBRrXzlFS9Cf-cK1nRf7vyggHxhz0Ap05FZyeeCjWy6AxWejb2sRaoAvrsNQCgDIt6v1S_RE6BX-y7kvrkkg')
+
+app_key = 'pr67lhblobb9rro'
+app_secret = 'rmlzptwlgp29c2c'
+refresh_token = "yoPEVc75a_sAAAAAAAAAARGTACcYIov5TuBqGJhJrA7H5qV3KGYR_XnD7qUXBtdp"
+dbx = dropbox.Dropbox(oauth2_refresh_token=refresh_token, app_key=app_key, app_secret=app_secret)
+
 # 以下ファイルがアップロードされた時の処理
 if uploaded_file is not None:
     progress_message = st.empty()
