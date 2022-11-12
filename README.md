@@ -7,3 +7,4 @@
 [画像の保存](https://zenn.dev/ohtaman/articles/streamlit_tips)  
 [pythonとdropbox接続方法](https://zerofromlight.com/blogs/detail/122/)  
 [dropxboxのアクセストークン取得方法](https://zerofromlight.com/blogs/detail/121/)
+[dropboxのアクセストークン自動更新](https://zerofromlight.com/blogs/detail/124/)
