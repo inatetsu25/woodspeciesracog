@@ -58,7 +58,7 @@ uploaded_file = st.sidebar.file_uploader("画像をアップロードしてく�
 app_key = 'pr67lhblobb9rro'
 app_secret = 'rmlzptwlgp29c2c'
 refresh_token = "yoPEVc75a_sAAAAAAAAAARGTACcYIov5TuBqGJhJrA7H5qV3KGYR_XnD7qUXBtdp"
-dbx = dropbox.Dropbox(oauth2_refresh_token=refresh_token, app_key=app_key, app_secret=app_secret)
+# dbx = dropbox.Dropbox(oauth2_refresh_token=refresh_token, app_key=app_key, app_secret=app_secret)
 
 # 以下ファイルがアップロードされた時の処理
 if uploaded_file is not None:
@@ -71,18 +71,21 @@ if uploaded_file is not None:
     format = uploaded_file.type.split('/', 1)[-1]
 
     # 画像を保存する
-    with open(uploaded_file.name, 'wb') as f:
-        f.write(uploaded_file.read())
-    dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+"img_"+str(date)+'_'+str(time)+'_'+species_name+'.'+format)
-    os.remove(uploaded_file.name)
+    # with open(uploaded_file.name, 'wb') as f:
+    #     f.write(uploaded_file.read())
+    # dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+"img_"+str(date)+'_'+str(time)+'_'+species_name+'.'+format)
+    # os.remove(uploaded_file.name)
         
 
     img = Image.open(uploaded_file)
 
     patches = preprocess.preprocess(img)
+    results50=[["ヤマボウシ",1]]
+    results10=[["ヤマボウシ",1]]
+
     # 各画像や、ラベル、確率を格納する空のリストを定義しておく
-    results10,results50 = predict.predict_name(patches)
-    db.insert_data(dt,'pred'+results50)
+    # results10,results50 = predict.predict_name(patches)
+    db.insert_data(dt, species_name, results50[0][0])
     db.select_data()
 
     
