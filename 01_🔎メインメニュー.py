@@ -17,11 +17,9 @@ from PIL import Image
 import os
 import dropbox
 import datetime
-
-from backend import predict, preprocess, member, db
-
 import pandas as pd
 
+from backend import predict, preprocess, member, db
 
 favicon = Image.open("名大.png")
 st.set_page_config(
@@ -86,8 +84,6 @@ if uploaded_file is not None:
     # 各画像や、ラベル、確率を格納する空のリストを定義しておく
     # results10,results50 = predict.predict_name(patches)
     db.insert_data(dt, species_name, results50[0][0])
-    db.select_data()
-
     
     st.header('分析結果詳細')
     st.subheader('50種モデルの結果')
