@@ -13,3 +13,4 @@ st.header('結果一覧')
 
 db_df = db.select_data()
 st.write(db_df)
+db.delete()

@@ -30,3 +30,16 @@ def insert_data(time,true_name,predict_name):
     con.commit()
     cur.close()
     con.close()
+
+def delete():
+    con = sqlite3.connect('./sample.db')
+    cur = con.cursor()
+
+    sql = 'DELETE FROM TIME_SPECIES where id = (?)'
+
+    data = [2]
+
+    cur.execute(sql, data)
+    con.commit()
+    cur.close()
+    con.close()
