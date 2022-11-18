@@ -6,6 +6,7 @@ def select_data():
     cur = con.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS TIME_SPECIES(id INTEGER PRIMARY KEY AUTOINCREMENT, time DATETIME,true_name TEXT, predict_name TEXT, TF TEXT)")
     df = pd.read_sql('SELECT * FROM TIME_SPECIES', con)
+    print(df)
     cur.close()
     con.close()
     return df
@@ -31,13 +32,14 @@ def insert_data(time,true_name,predict_name):
     cur.close()
     con.close()
 
-def delete():
+def delete(delete_id):
     con = sqlite3.connect('./sample.db')
     cur = con.cursor()
 
     sql = 'DELETE FROM TIME_SPECIES where id = (?)'
 
-    data = [2]
+    data = [delete_id]
+    print(delete_id)
 
     cur.execute(sql, data)
     con.commit()
