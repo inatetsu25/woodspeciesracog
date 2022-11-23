@@ -1,6 +1,6 @@
 import streamlit as st
-from backend import db
 from PIL import Image
+import pandas as pd
 
 favicon = Image.open("名大.png")
 st.set_page_config(
@@ -11,10 +11,7 @@ st.set_page_config(
 st.title('木検索アプリ')
 st.header('結果一覧')
 
-db_df = db.select_data()
+file_path = "./test.csv"
+db_df = pd.read_csv(file_path)
+
 st.write(db_df)
-
-
-delete_id = st.text_input('idを入力')
-st.button(label='削除する',on_click=db.delete(delete_id))
-# db.delete(delete_id)
