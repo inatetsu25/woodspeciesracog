@@ -8,8 +8,6 @@
 # pythonとdropboxの接続 https://zerofromlight.com/blogs/detail/122/
 # dropboxのアクセストークン取得方法 https://zerofromlight.com/blogs/detail/121/
 # dropboxのアクセストークン自動更新 https://zerofromlight.com/blogs/detail/124/
-# App key:  pr67lhblobb9rro
-# App secret: rmlzptwlgp29c2c
 
 # ライブラリのインポート
 import streamlit as st
@@ -22,9 +20,11 @@ import pandas as pd
 from backend import predict, preprocess, member, csv_function
 
 # dropbox関連のパスやキーを設定する
-app_key = 'pr67lhblobb9rro'
-app_secret = 'rmlzptwlgp29c2c'
-refresh_token = "yoPEVc75a_sAAAAAAAAAARGTACcYIov5TuBqGJhJrA7H5qV3KGYR_XnD7qUXBtdp"
+app_key = 'ここにAPP keyを入れる'
+app_secret = 'ここにApp secretを入れる'
+refresh_token = "ここにアクセストークンを入れる"
+
+
 file_path = "result.csv"
 dbx_path = "/result.csv"
 column=["time", "true_name", "predict1","predict2","predict3"]
