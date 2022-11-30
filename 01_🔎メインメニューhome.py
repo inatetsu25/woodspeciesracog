@@ -101,7 +101,6 @@ if uploaded_file is not None:
     
     st.header('分析結果詳細 results')
     st.subheader('50種モデルの結果 50 species model')
-    
     for i in range(len(results50_ja)):
         bar.progress(i/2)
         if results50_ja[i][1] > 0:
