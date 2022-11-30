@@ -20,12 +20,9 @@ import pandas as pd
 from backend import predict, preprocess, member, csv_function
 
 # dropbox関連のパスやキーを設定する
-app_key = 'pr67lhblobb9rro'
-app_secret = 'rmlzptwlgp29c2c'
-refresh_token = "uYNHJV96YhIAAAAAAAAAAWhLbnJ4Sozyx4pKWOj12b044ZrH0vSWQ2-BaVlq5Ruk"
-# app_key = 'ここにAPP keyを入れる'
-# app_secret = 'ここにApp secretを入れる'
-# refresh_token = "ここにアクセストークンを入れる"
+app_key = 'ここにAPP keyを入れる'
+app_secret = 'ここにApp secretを入れる'
+refresh_token = "ここにアクセストークンを入れる"
 
 file_path = "result.csv"
 dbx_path = "/result.csv"
