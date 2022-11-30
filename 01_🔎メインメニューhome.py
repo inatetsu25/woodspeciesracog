@@ -8,8 +8,6 @@
 # pythonとdropboxの接続 https://zerofromlight.com/blogs/detail/122/
 # dropboxのアクセストークン取得方法 https://zerofromlight.com/blogs/detail/121/
 # dropboxのアクセストークン自動更新 https://zerofromlight.com/blogs/detail/124/
-# App key:  pr67lhblobb9rro
-# App secret: rmlzptwlgp29c2c
 
 # ライブラリのインポート
 import streamlit as st
@@ -24,7 +22,11 @@ from backend import predict, preprocess, member, csv_function
 # dropbox関連のパスやキーを設定する
 app_key = 'pr67lhblobb9rro'
 app_secret = 'rmlzptwlgp29c2c'
-refresh_token = "yoPEVc75a_sAAAAAAAAAARGTACcYIov5TuBqGJhJrA7H5qV3KGYR_XnD7qUXBtdp"
+refresh_token = "uYNHJV96YhIAAAAAAAAAAWhLbnJ4Sozyx4pKWOj12b044ZrH0vSWQ2-BaVlq5Ruk"
+# app_key = 'ここにAPP keyを入れる'
+# app_secret = 'ここにApp secretを入れる'
+# refresh_token = "ここにアクセストークンを入れる"
+
 file_path = "result.csv"
 dbx_path = "/result.csv"
 column=["time", "true_name", "predict1","predict2","predict3"]
@@ -37,28 +39,34 @@ st.set_page_config(
  )
 
 # タイトル
-st.title('木検索アプリ')
+st.title('木検索アプリ\n**wood serch app**')
 
-member10 = member.member10(0,10)
-member50 = member.member(0,50)
-df_member10 = pd.DataFrame(member10,columns=['樹種'])
-df_member50 = pd.DataFrame(member50,columns=['樹種'])
+member10_ja = member.member10_ja(0,10)
+member10_en = member.member10_en(0,10)
+member50_ja = member.member_ja(0,50)
+member50_en = member.member_en(0,50)
+ 
+df_member10 = pd.DataFrame([member10_ja,member10_en], index=['樹種','scientific name'])
+df_member50 = pd.DataFrame([member50_ja, member50_en], index=['樹種','scientific name'])
+df_member10 = df_member10.T
+df_member50 = df_member50.T
+
 
 col1, col2 = st.columns(2)
 
 with col1:
-   st.header("10種一覧")
+   st.header("10種一覧\n**10 species list**")
    st.write(df_member10)
 
 with col2:
-   st.header("50種一覧")
+   st.header("50種一覧\n**50 species list**")
    st.write(df_member50)
 
 # サイドバー
-st.sidebar.title('さっそく検索する')
-species_name=st.sidebar.text_input('①種名を入力', value="nodata", help="例 スギ")
-st.sidebar.write('②画像をアップロード')
-st.sidebar.write('③識別結果が右に表示されます。')
+st.sidebar.title('さっそく検索する\n**try it out**')
+species_name=st.sidebar.text_input('①種名を入力(input species name)', value="nodata", help="例 スギ")
+st.sidebar.write('②画像をアップロード(upload image)')
+st.sidebar.write('③識別結果が右に表示されます。(display results)')
 st.sidebar.write('--------------')
 uploaded_file = st.sidebar.file_uploader("画像をアップロードしてください。", type=['jpg','jpeg', 'png'])
 
@@ -70,7 +78,7 @@ csv_function.file_check(file_path,dbx_path, dbx,column)
 # 以下ファイルがアップロードされた時の処理
 if uploaded_file is not None:
     progress_message = st.empty()
-    progress_message.write('識別中です。お待ちください。')
+    progress_message.write('識別中です。お待ちください。\nWait a minutes.')
     bar = st.progress(0)
     dt = datetime.datetime.today()
     date = dt.date()
@@ -89,28 +97,29 @@ if uploaded_file is not None:
     patches = preprocess.preprocess(img)
 
     # 各画像や、ラベル、確率を格納する空のリストを定義しておく
-    results10,results50 = predict.predict_name(patches)
+    results10_ja,results50_ja,results10_en,results50_en = predict.predict_name(patches)
 
-    add_list = [[dt, species_name, results50[0][0],results50[1][0],results50[2][0],]]
+    add_list = [[dt, species_name, results50_ja[0][0],results50_ja[1][0],results50_ja[2][0],]]
     csv_function.file_update(file_path,dbx_path,dbx,column,add_list)
     
-    st.header('分析結果詳細')
-    st.subheader('50種モデルの結果')
-    for i,result in enumerate(results50):
+    st.header('分析結果詳細 results')
+    st.subheader('50種モデルの結果 50 species model')
+    for i in range(len(results50_ja)):
         bar.progress(i/2)
-        if result[1] > 0:
-            st.write(result[0], 'の可能性:' , round(result[1],2), '%')
+        if results50_ja[i][1] > 0:
+            st.write(results50_ja[i][0], 'の可能性('+results50_en[i][0]+'):', round(results50_ja[i][1],2), '%')
         else:
             pass
-    st.subheader('10種モデルの結果')
-    for i,result in enumerate(results10):
-        bar.progress(i/2)
-        if result[1] > 0:
-            st.write(result[0], 'の可能性:' , round(result[1],2), '%')
+
+    st.subheader('10種モデルの結果 10 species model')
+    for i in range(len(results10_ja)):
+        if results10_ja[i][1] > 0:
+            st.write(results10_ja[i][0], 'の可能性('+results10_en[i][0]+'):', round(results10_ja[i][1],2), '%')
         else:
             pass
+
     st.image(img, caption='画像',use_column_width=True)
     bar.empty()
 
     # ここまで処理が終わったら分析が終わったことを示すメッセージを表示
-    progress_message.write(f'{results50[0][0]}です!')
+    progress_message.write(f'{results50_ja[0][0]+results50_en[0][0]}!')

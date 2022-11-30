@@ -11,7 +11,7 @@ st.set_page_config(
 st.title('木検索アプリ')
 st.header('結果一覧')
 
-file_path = "./test.csv"
+file_path = "./result.csv"
 db_df = pd.read_csv(file_path)
 
 st.write(db_df)
