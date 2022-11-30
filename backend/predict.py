@@ -26,12 +26,16 @@ def predict_name(image):
         sum_pred_value50 += pred_value50[index][:]
 
 
-    result10 = []
-    result50 = []
+    result10_ja = []
+    result10_en = []
+    result50_ja = []
+    result50_en = []
     top = 3
     max_index10 = sum_pred_value10.argsort()[::-1][:top]
     max_index50 = sum_pred_value50.argsort()[::-1][:top]
     for i in range(top):
-        result10.append([member.member(max_index10[i],max_index10[i]+1)[0],round(sum_pred_value10[max_index10[i]],1)])
-        result50.append([member.member(max_index50[i],max_index50[i]+1)[0],round(sum_pred_value50[max_index50[i]],1)])
-    return result10,result50
+        result10_ja.append([member.member_ja(max_index10[i],max_index10[i]+1)[0],round(sum_pred_value10[max_index10[i]],1)])
+        result10_en.append([member.member_en(max_index10[i],max_index10[i]+1)[0],round(sum_pred_value10[max_index10[i]],1)])
+        result50_ja.append([member.member_ja(max_index50[i],max_index50[i]+1)[0],round(sum_pred_value50[max_index50[i]],1)])
+        result50_en.append([member.member_en(max_index50[i],max_index50[i]+1)[0],round(sum_pred_value50[max_index50[i]],1)])
+    return result10_ja,result50_ja,result10_en,result50_en
