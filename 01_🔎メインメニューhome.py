@@ -20,12 +20,9 @@ import pandas as pd
 from backend import predict, preprocess, member, csv_function
 
 # dropbox関連のパスやキーを設定する
-app_key = 'pr67lhblobb9rro'
-app_secret = 'rmlzptwlgp29c2c'
-refresh_token = "uYNHJV96YhIAAAAAAAAAAWhLbnJ4Sozyx4pKWOj12b044ZrH0vSWQ2-BaVlq5Ruk"
-# app_key = 'ここにAPP keyを入れる'
-# app_secret = 'ここにApp secretを入れる'
-# refresh_token = "ここにアクセストークンを入れる"
+app_key = 'ここにAPP keyを入れる'
+app_secret = 'ここにApp secretを入れる'
+refresh_token = "ここにアクセストークンを入れる"
 
 file_path = "result.csv"
 dbx_path = "/result.csv"
@@ -40,6 +37,10 @@ st.set_page_config(
 
 # タイトル
 st.title('木検索アプリ\n**wood serch app**')
+
+
+link = '[森林総合研究所データベースはこちら database ](http://db.ffpri.affrc.go.jp/woodDB/TWTwDB/home.php)'
+st.markdown(link,unsafe_allow_html=True)
 
 member10_ja = member.member10_ja(0,10)
 member10_en = member.member10_en(0,10)
