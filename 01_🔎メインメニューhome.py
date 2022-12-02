@@ -38,6 +38,10 @@ st.set_page_config(
 # タイトル
 st.title('木検索アプリ\n**wood serch app**')
 
+
+link = '[森林総合研究所データベースはこちら database ](http://db.ffpri.affrc.go.jp/woodDB/TWTwDB/home.php)'
+st.markdown(link,unsafe_allow_html=True)
+
 member10_ja = member.member10_ja(0,10)
 member10_en = member.member10_en(0,10)
 member50_ja = member.member_ja(0,50)
