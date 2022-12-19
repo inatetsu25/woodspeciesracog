@@ -8,24 +8,30 @@
 # pythonとdropboxの接続 https://zerofromlight.com/blogs/detail/122/
 # dropboxのアクセストークン取得方法 https://zerofromlight.com/blogs/detail/121/
 # dropboxのアクセストークン自動更新 https://zerofromlight.com/blogs/detail/124/
+# 10_fine_4を使用
 
 # ライブラリのインポート
 import streamlit as st
 from PIL import Image
 import os
-# import dropbox
+import dropbox
 import datetime
 import pandas as pd
+from decouple import config
 
 from backend import predict, preprocess, member, csv_function
 
-# # dropbox関連のパスやキーを設定する
-# app_key = 'ここにAPP keyを入れる'
-# app_secret = 'ここにApp secretを入れる'
-# refresh_token = "ここにアクセストークンを入れる"
+
+REFRESH_TOKEN = config('REFRESH_TOKEN')
+APP_KEY = config('APP_KEY')
+APP_SECRET = config('APP_SECRET')
+print(REFRESH_TOKEN)
+print(REFRESH_TOKEN)
+print(REFRESH_TOKEN)
+
 
 file_path = "result.csv"
-# dbx_path = "/result.csv"
+dbx_path = "/result.csv"
 column=["time", "true_name", "predict1","predict2","predict3"]
 
 
@@ -77,9 +83,9 @@ st.sidebar.write('③識別結果が右に表示されます。(display results)
 st.sidebar.write('--------------')
 uploaded_file = st.sidebar.file_uploader("画像をアップロードしてください。", type=['jpg','jpeg', 'png'])
 
-# dbx = dropbox.Dropbox(oauth2_refresh_token=refresh_token, app_key=app_key, app_secret=app_secret)
+dbx = dropbox.Dropbox(oauth2_refresh_token=REFRESH_TOKEN, app_key=APP_KEY, app_secret=APP_SECRET)
 
-# csv_function.file_check(file_path,dbx_path, dbx,column)
+csv_function.file_check(file_path,dbx_path, dbx,column)
 
 
 # 以下ファイルがアップロードされた時の処理
@@ -95,7 +101,7 @@ if uploaded_file is not None:
     # 画像を保存する
     with open(uploaded_file.name, 'wb') as f:
         f.write(uploaded_file.read())
-    # dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+"img_"+str(date)+'_'+str(time)+'_'+species_name+'.'+format)
+    dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+"img_"+str(date)+'_'+str(time)+'_'+species_name+'.'+format)
     os.remove(uploaded_file.name)
         
 
@@ -107,7 +113,7 @@ if uploaded_file is not None:
     results10_ja,results50_ja,results10_en,results50_en = predict.predict_name(patches)
 
     add_list = [[dt, species_name, results50_ja[0][0],results50_ja[1][0],results50_ja[2][0],]]
-    # csv_function.file_update(file_path,dbx_path,dbx,column,add_list)
+    csv_function.file_update(file_path,dbx_path,dbx,column,add_list)
     
     st.header('分析結果詳細 results')
     st.subheader('50種モデルの結果 50 species model')
