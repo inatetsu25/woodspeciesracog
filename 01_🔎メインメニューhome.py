@@ -25,9 +25,6 @@ from backend import predict, preprocess, member, csv_function
 REFRESH_TOKEN = config('REFRESH_TOKEN')
 APP_KEY = config('APP_KEY')
 APP_SECRET = config('APP_SECRET')
-print(REFRESH_TOKEN)
-print(REFRESH_TOKEN)
-print(REFRESH_TOKEN)
 
 
 file_path = "result.csv"
