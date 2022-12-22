@@ -1,6 +1,6 @@
 DateTime==4.7
 dropbox==11.34.0
-opencv-contrib-python-headless==3.4.9.31
+opencv-contrib-python-headless==4.6.0.66
 os-sys==2.1.4
 pandas==1.4.4
 Pillow==9.2.0 
