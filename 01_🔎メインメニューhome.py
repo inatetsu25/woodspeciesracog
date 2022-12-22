@@ -51,27 +51,6 @@ st.text(
 link = '[森林総合研究所データベースはこちら database ](http://db.ffpri.affrc.go.jp/woodDB/TWTwDB/home.php)'
 st.markdown(link,unsafe_allow_html=True)
 
-member10_ja = member.member10_ja(0,10)
-member10_en = member.member10_en(0,10)
-member50_ja = member.member_ja(0,50)
-member50_en = member.member_en(0,50)
- 
-df_member10 = pd.DataFrame([member10_ja,member10_en], index=['樹種','scientific name'])
-df_member50 = pd.DataFrame([member50_ja, member50_en], index=['樹種','scientific name'])
-df_member10 = df_member10.T
-df_member50 = df_member50.T
-
-
-col1, col2 = st.columns(2)
-
-with col1:
-   st.header("10種一覧\n**10 species list**")
-   st.write(df_member10)
-
-with col2:
-   st.header("50種一覧\n**50 species list**")
-   st.write(df_member50)
-
 # サイドバー
 st.sidebar.title('さっそく検索する\n**try it out**')
 species_name=st.sidebar.text_input('①種名を入力(input species name)', value="nodata", help="例 スギ")
