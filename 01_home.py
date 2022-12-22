@@ -19,7 +19,7 @@ import datetime
 import pandas as pd
 from decouple import config
 
-from backend import predict, preprocess, member, csv_function
+from backend import predict, preprocess, csv_function
 
 
 REFRESH_TOKEN = config('REFRESH_TOKEN')
