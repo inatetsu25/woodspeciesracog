@@ -9,6 +9,3 @@
 [dropxboxのアクセストークン取得方法](https://zerofromlight.com/blogs/detail/121/)  
 [dropboxのアクセストークン自動更新](https://zerofromlight.com/blogs/detail/124/)  
 [envファイルの使い方と使う意味](https://qiita.com/KueharX/items/52a7a4ed2daf88f20cc3)  
-「envファイルの使い方  
-①.env_exampleをコピーして.envにファイル名を変更する  
-②.env内にrefresh_token、app_key、app_secretを入れる」  
