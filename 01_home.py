@@ -16,7 +16,6 @@ from PIL import Image
 import os
 import dropbox
 import datetime
-import pandas as pd
 from decouple import config
 
 from backend import predict, preprocess, csv_function
