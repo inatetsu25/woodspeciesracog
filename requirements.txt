@@ -7,4 +7,3 @@ python-csv==0.0.13
 python-decouple==3.6
 streamlit==1.12.2
 tensorflow==2.10.0
-numpy==1.23.3
