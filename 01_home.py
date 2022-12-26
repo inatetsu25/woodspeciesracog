@@ -11,19 +11,18 @@
 # 10_fine_4を使用
 
 # ライブラリのインポート
-import streamlit as st
-from PIL import Image
-import os
-import dropbox
 import datetime
-from decouple import config
+import dropbox
+import os
+from PIL import Image
+import streamlit as st
 
 from backend import predict, preprocess, csv_function
 
 
-REFRESH_TOKEN = config('REFRESH_TOKEN')
-APP_KEY = config('APP_KEY')
-APP_SECRET = config('APP_SECRET')
+REFRESH_TOKEN = st.secrets['REFRESH_TOKEN']
+APP_KEY = st.secrets['APP_KEY']
+APP_SECRET = st.secrets['APP_SECRET']
 
 
 file_path = "result.csv"
