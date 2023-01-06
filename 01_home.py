@@ -8,6 +8,7 @@
 # pythonとdropboxの接続 https://zerofromlight.com/blogs/detail/122/
 # dropboxのアクセストークン取得方法 https://zerofromlight.com/blogs/detail/121/
 # dropboxのアクセストークン自動更新 https://zerofromlight.com/blogs/detail/124/
+# git version管理 https://www.lyzon.co.jp/blog/2019/20191017_how_to_attach_version_name/
 # 10_fine_4を使用
 
 # ライブラリのインポート
