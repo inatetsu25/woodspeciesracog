@@ -23,9 +23,6 @@ from decouple import config
 from backend import predict, preprocess, csv_function
 
 
-REFRESH_TOKEN = config('REFRESH_TOKEN')
-APP_KEY = config('APP_KEY')
-APP_SECRET = config('APP_SECRET')
 
 
 file_path = "result.csv"
