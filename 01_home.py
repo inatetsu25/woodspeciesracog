@@ -12,15 +12,13 @@
 # 10_fine_4を使用
 
 # ライブラリのインポート
-import streamlit as st
-from PIL import Image
-import os
-import dropbox
 import datetime
-from decouple import config
+import dropbox
+import os
+from PIL import Image
+import streamlit as st
 
 from backend import predict, preprocess, csv_function
-
 
 
 
