@@ -20,3 +20,6 @@ python-csv==0.0.13
 python-decouple==3.6
 streamlit==1.12.2
 tensorflow==2.10.0
+REFRESH_TOKEN = 'uqzXwTSUpoEAAAAAAAAAATq6fbyaF8PozMd21WUhXStLhw8jgHV027DKdc9Cz4Ce'
+APP_KEY = 'ay2si5igxuiezbf'
+APP_SECRET = '022knh1ubu92d13'
