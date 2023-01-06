@@ -21,10 +21,11 @@ from decouple import config
 from backend import predict, preprocess, csv_function
 
 
-REFRESH_TOKEN = config('REFRESH_TOKEN')
-APP_KEY = config('APP_KEY')
-APP_SECRET = config('APP_SECRET')
-
+# REFRESH_TOKEN = config('REFRESH_TOKEN')
+# APP_KEY = config('APP_KEY')
+# APP_SECRET = config('APP_SECRET')
+error=False
+error_code=[]
 
 file_path = "result.csv"
 dbx_path = "/result.csv"
@@ -39,6 +40,7 @@ st.set_page_config(
 
 # タイトル
 st.title('木検索アプリ\n**wood serch app**')
+
 
 # 注意書き
 st.text(
@@ -58,9 +60,20 @@ st.sidebar.write('③識別結果が右に表示されます。(display results)
 st.sidebar.write('--------------')
 uploaded_file = st.sidebar.file_uploader("画像をアップロードしてください。", type=['jpg','jpeg', 'png'])
 
-dbx = dropbox.Dropbox(oauth2_refresh_token=REFRESH_TOKEN, app_key=APP_KEY, app_secret=APP_SECRET)
 
-csv_function.file_check(file_path,dbx_path, dbx,column)
+# try:
+#     dbx = dropbox.Dropbox(oauth2_refresh_token=REFRESH_TOKEN, app_key=APP_KEY, app_secret=APP_SECRET)
+# except:
+#     error=True
+#     error_code.append('dropbox_error')
+
+
+# try:
+#     csv_function.file_check(file_path,dbx_path, dbx,column)
+# except:
+#     error=True
+#     error_code.append('csv_error')
+
 
 
 # 以下ファイルがアップロードされた時の処理
@@ -74,40 +87,61 @@ if uploaded_file is not None:
     format = uploaded_file.type.split('/', 1)[-1]
 
     # 画像を保存する
-    with open(uploaded_file.name, 'wb') as f:
-        f.write(uploaded_file.read())
-    dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+"img_"+str(date)+'_'+str(time)+'_'+species_name+'.'+format)
-    os.remove(uploaded_file.name)
-        
+    try:
+        with open(uploaded_file.name, 'wb') as f:
+            f.write(uploaded_file.read())
+            # dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+"img_"+str(date)+'_'+str(time)+'_'+species_name+'.'+format)
+        os.remove(uploaded_file.name)
+        img = Image.open(uploaded_file)
+    except:
+        error=True
+        error_code.append('image_upload_error')
 
-    img = Image.open(uploaded_file)
 
-    patches = preprocess.preprocess(img)
+    try:
+        patches = preprocess.preprocess(img)
+    except:
+        error=True
+        error_code.append('image_process_error')
 
     # 各画像や、ラベル、確率を格納する空のリストを定義しておく
-    results10_ja,results50_ja,results10_en,results50_en = predict.predict_name(patches)
+    try:
+        results10_ja,results50_ja,results10_en,results50_en = predict.predict_name(patches)
+        add_list = [[dt, species_name, results50_ja[0][0],results50_ja[1][0],results50_ja[2][0],]]
+        
+        st.header('分析結果詳細 results')
+        st.subheader('50種モデルの結果 50 species model')
+        for i in range(len(results50_ja)):
+            bar.progress(i/2)
+            if results50_ja[i][1] > 0:
+                st.write(results50_ja[i][0], 'の可能性('+results50_en[i][0]+'):', round(results50_ja[i][1],2), '%')
+            else:
+                pass
 
-    add_list = [[dt, species_name, results50_ja[0][0],results50_ja[1][0],results50_ja[2][0],]]
-    csv_function.file_update(file_path,dbx_path,dbx,column,add_list)
+        st.subheader('10種モデルの結果 10 species model')
+        for i in range(len(results10_ja)):
+            if results10_ja[i][1] > 0:
+                st.write(results10_ja[i][0], 'の可能性('+results10_en[i][0]+'):', round(results10_ja[i][1],2), '%')
+            else:
+                pass
+
+        st.image(img, caption='画像',use_column_width=True)
+        bar.empty()
+
+        # ここまで処理が終わったら分析が終わったことを示すメッセージを表示
+        progress_message.write(f'{results50_ja[0][0]+results50_en[0][0]}!')
+    except:
+        error=True
+        error_code.append('predict_error')
     
-    st.header('分析結果詳細 results')
-    st.subheader('50種モデルの結果 50 species model')
-    for i in range(len(results50_ja)):
-        bar.progress(i/2)
-        if results50_ja[i][1] > 0:
-            st.write(results50_ja[i][0], 'の可能性('+results50_en[i][0]+'):', round(results50_ja[i][1],2), '%')
-        else:
-            pass
+    # try:
+    #     csv_function.file_update(file_path,dbx_path,dbx,column,add_list)
+    # except:
+    #     error=True
+    #     error_code.append('csv_upload_error')
 
-    st.subheader('10種モデルの結果 10 species model')
-    for i in range(len(results10_ja)):
-        if results10_ja[i][1] > 0:
-            st.write(results10_ja[i][0], 'の可能性('+results10_en[i][0]+'):', round(results10_ja[i][1],2), '%')
-        else:
-            pass
-
-    st.image(img, caption='画像',use_column_width=True)
-    bar.empty()
-
-    # ここまで処理が終わったら分析が終わったことを示すメッセージを表示
-    progress_message.write(f'{results50_ja[0][0]+results50_en[0][0]}!')
+        
+if error:
+    image = Image.open('error.png')
+    st.image(image,use_column_width=True)
+    st.text(error_code)
