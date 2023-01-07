@@ -8,6 +8,7 @@
 # pythonとdropboxの接続 https://zerofromlight.com/blogs/detail/122/
 # dropboxのアクセストークン取得方法 https://zerofromlight.com/blogs/detail/121/
 # dropboxのアクセストークン自動更新 https://zerofromlight.com/blogs/detail/124/
+# git version管理 https://www.lyzon.co.jp/blog/2019/20191017_how_to_attach_version_name/
 # 10_fine_4を使用
 
 # ライブラリのインポート
@@ -16,13 +17,14 @@ import dropbox
 import os
 from PIL import Image
 import streamlit as st
+from decouple import config
 
 from backend import predict, preprocess, csv_function
 
 
-REFRESH_TOKEN = st.secrets['REFRESH_TOKEN']
-APP_KEY = st.secrets['APP_KEY']
-APP_SECRET = st.secrets['APP_SECRET']
+REFRESH_TOKEN = config('REFRESH_TOKEN')
+APP_KEY = config('APP_KEY')
+APP_SECRET = config('APP_SECRET')
 
 
 file_path = "result.csv"
