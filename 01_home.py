@@ -18,6 +18,7 @@ import dropbox
 import os
 from PIL import Image
 import streamlit as st
+from decouple import config
 
 from backend import predict, preprocess, csv_function
 
