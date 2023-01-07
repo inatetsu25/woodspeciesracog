@@ -9,14 +9,3 @@
 [dropxboxのアクセストークン取得方法](https://zerofromlight.com/blogs/detail/121/)  
 [dropboxのアクセストークン自動更新](https://zerofromlight.com/blogs/detail/124/)  
 [envファイルの使い方と使う意味](https://qiita.com/KueharX/items/52a7a4ed2daf88f20cc3)  
-
-
-DateTime==4.7
-dropbox==11.34.0
-opencv-contrib-python-headless==4.6.0.66
-pandas==1.4.4
-Pillow==9.2.0
-python-csv==0.0.13
-python-decouple==3.6
-streamlit==1.12.2
-tensorflow==2.10.0
