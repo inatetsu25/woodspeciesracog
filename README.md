@@ -10,17 +10,3 @@
 [dropboxのアクセストークン自動更新](https://zerofromlight.com/blogs/detail/124/)  
 [envファイルの使い方と使う意味](https://qiita.com/KueharX/items/52a7a4ed2daf88f20cc3)  
 [git version管理](https://www.lyzon.co.jp/blog/2019/20191017_how_to_attach_version_name/)  
-
-
-DateTime==4.7
-dropbox==11.34.0
-opencv-contrib-python-headless==4.6.0.66
-pandas==1.4.4
-Pillow==9.2.0
-python-csv==0.0.13
-python-decouple==3.6
-streamlit==1.12.2
-tensorflow==2.10.0
-REFRESH_TOKEN = 'uqzXwTSUpoEAAAAAAAAAATq6fbyaF8PozMd21WUhXStLhw8jgHV027DKdc9Cz4Ce'
-APP_KEY = 'ay2si5igxuiezbf'
-APP_SECRET = '022knh1ubu92d13'
