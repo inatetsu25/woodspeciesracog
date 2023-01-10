@@ -20,9 +20,6 @@ import datetime
 
 from backend import predict, preprocess, csv_function
 
-REFRESH_TOKEN = st.secrets['REFRESH_TOKEN']
-APP_KEY = st.secrets['APP_KEY']
-APP_SECRET = st.secrets['APP_SECRET']
 
 error=False
 error_code=[]
@@ -37,6 +34,10 @@ st.set_page_config(
      page_title="日本産広葉樹判別アプリ",
      page_icon=favicon,
  )
+
+REFRESH_TOKEN = st.secrets['REFRESH_TOKEN']
+APP_KEY = st.secrets['APP_KEY']
+APP_SECRET = st.secrets['APP_SECRET']
 
 # タイトル
 st.title('木検索アプリ\n**wood serch app**')
@@ -63,16 +64,16 @@ uploaded_file = st.sidebar.file_uploader("画像をアップロードしてく�
 
 try:
     dbx = dropbox.Dropbox(oauth2_refresh_token=REFRESH_TOKEN, app_key=APP_KEY, app_secret=APP_SECRET)
-except:
+except Exception as e:
     error=True
-    error_code.append('dropbox_error')
+    error_code.append('dropbox_error:'+str(e))
 
 
 try:
     csv_function.file_check(file_path,dbx_path, dbx,column)
-except:
+except Exception as e:
     error=True
-    error_code.append('csv_error')
+    error_code.append('csv_error:'+str(e))
 
 
 
@@ -93,16 +94,16 @@ if uploaded_file is not None:
             dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+"img_"+str(date)+'_'+str(time)+'_'+species_name+'.'+format)
         os.remove(uploaded_file.name)
         img = Image.open(uploaded_file)
-    except:
+    except Exception as e:
         error=True
-        error_code.append('image_upload_error')
+        error_code.append('image_upload_error:'+str(e))
 
 
     try:
         patches = preprocess.preprocess(img)
-    except:
+    except Exception as e:
         error=True
-        error_code.append('image_process_error')
+        error_code.append('image_process_error:'+str(e))
 
     # 各画像や、ラベル、確率を格納する空のリストを定義しておく
     try:
@@ -130,18 +131,19 @@ if uploaded_file is not None:
 
         # ここまで処理が終わったら分析が終わったことを示すメッセージを表示
         progress_message.write(f'{results50_ja[0][0]+results50_en[0][0]}!')
-    except:
+    except Exception as e:
         error=True
-        error_code.append('predict_error')
+        error_code.append('predict_error:'+str(e))
     
     try:
         csv_function.file_update(file_path,dbx_path,dbx,column,add_list)
-    except:
+    except Exception as e:
         error=True
-        error_code.append('csv_upload_error')
+        error_code.append('csv_upload_error:'+str(e))
 
         
 if error:
     image = Image.open('error.png')
     st.image(image,use_column_width=True)
     st.text(error_code)
+    # st.button('改善しない報告')
