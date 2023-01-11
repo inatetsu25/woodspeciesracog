@@ -21,10 +21,9 @@ import streamlit as st
 from backend import predict, preprocess, csv_function
 
 
-REFRESH_TOKEN = st.secrets['REFRESH_TOKEN']
-APP_KEY = st.secrets['APP_KEY']
-APP_SECRET = st.secrets['APP_SECRET']
-
+REFRESH_TOKEN = st.secrets["REFRESH_TOKEN"]
+APP_KEY = st.secrets["APP_KEY"]
+APP_SECRET = st.secrets["APP_SECRET"]
 
 file_path = "result.csv"
 dbx_path = "/result.csv"
