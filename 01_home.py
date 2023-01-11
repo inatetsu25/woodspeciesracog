@@ -8,22 +8,21 @@
 # pythonとdropboxの接続 https://zerofromlight.com/blogs/detail/122/
 # dropboxのアクセストークン取得方法 https://zerofromlight.com/blogs/detail/121/
 # dropboxのアクセストークン自動更新 https://zerofromlight.com/blogs/detail/124/
-# git version管理 https://www.lyzon.co.jp/blog/2019/20191017_how_to_attach_version_name/
 # 10_fine_4を使用
 
+
 # ライブラリのインポート
-import datetime
-import dropbox
-import os
-from PIL import Image
 import streamlit as st
+from PIL import Image
+import os
+import dropbox
+import datetime
 
 from backend import predict, preprocess, csv_function
 
 
-REFRESH_TOKEN = st.secrets["REFRESH_TOKEN"]
-APP_KEY = st.secrets["APP_KEY"]
-APP_SECRET = st.secrets["APP_SECRET"]
+error=False
+error_code=[]
 
 file_path = "result.csv"
 dbx_path = "/result.csv"
@@ -36,8 +35,13 @@ st.set_page_config(
      page_icon=favicon,
  )
 
+REFRESH_TOKEN = st.secrets['REFRESH_TOKEN']
+APP_KEY = st.secrets['APP_KEY']
+APP_SECRET = st.secrets['APP_SECRET']
+
 # タイトル
 st.title('木検索アプリ\n**wood serch app**')
+
 
 # 注意書き
 st.text(
@@ -57,9 +61,20 @@ st.sidebar.write('③識別結果が右に表示されます。(display results)
 st.sidebar.write('--------------')
 uploaded_file = st.sidebar.file_uploader("画像をアップロードしてください。", type=['jpg','jpeg', 'png'])
 
-dbx = dropbox.Dropbox(oauth2_refresh_token=REFRESH_TOKEN, app_key=APP_KEY, app_secret=APP_SECRET)
 
-csv_function.file_check(file_path,dbx_path, dbx,column)
+try:
+    dbx = dropbox.Dropbox(oauth2_refresh_token=REFRESH_TOKEN, app_key=APP_KEY, app_secret=APP_SECRET)
+except Exception as e:
+    error=True
+    error_code.append('dropbox_error:'+str(e))
+
+
+try:
+    csv_function.file_check(file_path,dbx_path, dbx,column)
+except Exception as e:
+    error=True
+    error_code.append('csv_error:'+str(e))
+
 
 
 # 以下ファイルがアップロードされた時の処理
@@ -73,40 +88,62 @@ if uploaded_file is not None:
     format = uploaded_file.type.split('/', 1)[-1]
 
     # 画像を保存する
-    with open(uploaded_file.name, 'wb') as f:
-        f.write(uploaded_file.read())
-    dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+"img_"+str(date)+'_'+str(time)+'_'+species_name+'.'+format)
-    os.remove(uploaded_file.name)
-        
+    try:
+        with open(uploaded_file.name, 'wb') as f:
+            f.write(uploaded_file.read())
+            dbx.files_upload(open(uploaded_file.name, 'rb').read(), '/'+"img_"+str(date)+'_'+str(time)+'_'+species_name+'.'+format)
+        os.remove(uploaded_file.name)
+        img = Image.open(uploaded_file)
+    except Exception as e:
+        error=True
+        error_code.append('image_upload_error:'+str(e))
 
-    img = Image.open(uploaded_file)
 
-    patches = preprocess.preprocess(img)
+    try:
+        patches = preprocess.preprocess(img)
+    except Exception as e:
+        error=True
+        error_code.append('image_process_error:'+str(e))
 
     # 各画像や、ラベル、確率を格納する空のリストを定義しておく
-    results10_ja,results50_ja,results10_en,results50_en = predict.predict_name(patches)
+    try:
+        results10_ja,results50_ja,results10_en,results50_en = predict.predict_name(patches)
+        add_list = [[dt, species_name, results50_ja[0][0],results50_ja[1][0],results50_ja[2][0],]]
+        
+        st.header('分析結果詳細 results')
+        st.subheader('50種モデルの結果 50 species model')
+        for i in range(len(results50_ja)):
+            bar.progress(i/2)
+            if results50_ja[i][1] > 0:
+                st.write(results50_ja[i][0], 'の可能性('+results50_en[i][0]+'):', round(results50_ja[i][1],2), '%')
+            else:
+                pass
 
-    add_list = [[dt, species_name, results50_ja[0][0],results50_ja[1][0],results50_ja[2][0],]]
-    csv_function.file_update(file_path,dbx_path,dbx,column,add_list)
+        st.subheader('10種モデルの結果 10 species model')
+        for i in range(len(results10_ja)):
+            if results10_ja[i][1] > 0:
+                st.write(results10_ja[i][0], 'の可能性('+results10_en[i][0]+'):', round(results10_ja[i][1],2), '%')
+            else:
+                pass
+
+        st.image(img, caption='画像',use_column_width=True)
+        bar.empty()
+
+        # ここまで処理が終わったら分析が終わったことを示すメッセージを表示
+        progress_message.write(f'{results50_ja[0][0]+results50_en[0][0]}!')
+    except Exception as e:
+        error=True
+        error_code.append('predict_error:'+str(e))
     
-    st.header('分析結果詳細 results')
-    st.subheader('50種モデルの結果 50 species model')
-    for i in range(len(results50_ja)):
-        bar.progress(i/2)
-        if results50_ja[i][1] > 0:
-            st.write(results50_ja[i][0], 'の可能性('+results50_en[i][0]+'):', round(results50_ja[i][1],2), '%')
-        else:
-            pass
+    try:
+        csv_function.file_update(file_path,dbx_path,dbx,column,add_list)
+    except Exception as e:
+        error=True
+        error_code.append('csv_upload_error:'+str(e))
 
-    st.subheader('10種モデルの結果 10 species model')
-    for i in range(len(results10_ja)):
-        if results10_ja[i][1] > 0:
-            st.write(results10_ja[i][0], 'の可能性('+results10_en[i][0]+'):', round(results10_ja[i][1],2), '%')
-        else:
-            pass
-
-    st.image(img, caption='画像',use_column_width=True)
-    bar.empty()
-
-    # ここまで処理が終わったら分析が終わったことを示すメッセージを表示
-    progress_message.write(f'{results50_ja[0][0]+results50_en[0][0]}!')
+        
+if error:
+    image = Image.open('error.png')
+    st.image(image,use_column_width=True)
+    st.text(error_code)
+    # st.button('改善しない報告')
