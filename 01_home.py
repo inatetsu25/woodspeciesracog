@@ -24,6 +24,10 @@ from backend import predict, preprocess, csv_function
 error=False
 error_code=[]
 
+REFRESH_TOKEN = st.secrets["REFRESH_TOKEN"]
+APP_KEY = st.secrets["APP_KEY"]
+APP_SECRET = st.secrets["APP_SECRET"]
+
 file_path = "result.csv"
 dbx_path = "/result.csv"
 column=["time", "true_name", "predict1","predict2","predict3"]
