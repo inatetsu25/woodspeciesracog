@@ -135,16 +135,12 @@ if uploaded_file is not None:
 
         # ここまで処理が終わったら分析が終わったことを示すメッセージを表示
         progress_message.write(f'{results50_ja[0][0]+results50_en[0][0]}!')
-    except Exception as e:
-        error=True
-        error_code.append('predict_error:'+str(e))
-    
-    try:
+        
         csv_function.file_update(file_path,dbx_path,dbx,column,add_list)
+ 
     except Exception as e:
         error=True
-        error_code.append('csv_upload_error:'+str(e))
-
+        error_code.append('predict_error or csv_upload_error:'+str(e))
         
 if error:
     image = Image.open('error.png')
